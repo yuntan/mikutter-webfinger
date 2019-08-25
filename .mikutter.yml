@@ -1,0 +1,9 @@
+---
+slug: :webfinger
+depends:
+  mikutter: 3.9.4
+  plugin: []
+version: '1.0'
+author: '@yuntan_t@mstdn.maud.io'
+name: webfinger
+description: webfinger
