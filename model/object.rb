@@ -1,37 +1,16 @@
 # frozen_string_literal: true
 
+require_relative 'base'
+
 module Plugin::WebFinger
-  class Object < Diva::Model
+  class Object < Base
     include Diva::Model::MessageMixin
 
     register :webfinger_object, name: 'WebFinger Object', timeline: true
 
-    field.string :type, required: true
-    field.uri    :id, required: true
-    field.string :name, required: true
     field.string :content
     field.time   :created
-    field.uri    :attributed_to_url
-    field.uri    :url
-
-    # for basis model
-    # https://reference.mikutter.hachune.net/model/2017/05/06/basis-model.html
-    alias title name
-    alias uri id
-    alias perma_link url
-
-    class << self
-      @@objects = WeakStorage.new Diva::URI, Object, name: 'WebFinger Objects'
-
-      def find(uri)
-        @@objects[uri]
-      end
-    end
-
-    def initialize(*args)
-      super
-      @@objects[uri] = self
-    end
+    field.uri    :attributed_to_uri
 
     # should be implemented for message model
     def user
@@ -42,7 +21,7 @@ module Plugin::WebFinger
 
     # should be implemented for message model
     def description
-      content
+      content # TODO: deHTMLnize
     end
 
     def attributed_to

@@ -2,14 +2,13 @@
 
 require_relative 'fetch'
 require_relative 'model/command'
-require_relative 'model/actor'
 require_relative 'model_ext'
 
 PW = Plugin::WebFinger
 
 Plugin.create :webfinger do
   intent PW::Command, label: _('WebFingerで開く') do |token|
-    actor = discover token.model.query
+    actor = PW.discover token.model.query
     Plugin.call :open, actor
   end
 
@@ -39,7 +38,8 @@ Plugin.create :webfinger do
   deffragment PW::Actor, :outbox, _('投稿') do |actor|
     set_icon Skin[:timeline]
     tl = timeline nil
-    actor.outbox.orderd_items.each do |activity|
+    actor.outbox.fetch_page_next
+    actor.outbox.items.each do |activity|
       activity.type =~ /^Create$/ or next
       tl << activity.object
     end
