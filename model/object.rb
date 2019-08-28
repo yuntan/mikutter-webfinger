@@ -10,22 +10,17 @@ module Plugin::WebFinger
 
     field.string :content
     field.time   :created
+    field.time   :modified
     field.uri    :attributed_to_uri
 
     # should be implemented for message model
     def user
-      attributed_to || self.attributed_to = Enumerator.new do |y|
-        Plugin.filtering :webfinger_object, attributed_to_url, y
-      end.first
+      attributed_to
     end
 
     # should be implemented for message model
     def description
       content # TODO: deHTMLnize
-    end
-
-    def attributed_to
-      Object.findbyid attributed_to_url
     end
 
     def to_s

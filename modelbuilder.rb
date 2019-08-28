@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'model_ext'
+
 RE_TYPE_ACTIVITY = /^(Create|Announce)$/.freeze
 RE_TYPE_ACTOR = /^Person$/.freeze # TODO
 RE_TYPE_COLLECTION = /^(Ordered)?Collection$/.freeze
@@ -67,7 +69,7 @@ module Plugin::WebFinger
           )
 
         elsif klass == Object
-          attributed_to = data['attributed_to']
+          attributed_to = data['attributedTo']
 
           attributed_to.is_a? Hash and ModelBuilder.new(attributed_to).build
 
@@ -76,7 +78,8 @@ module Plugin::WebFinger
             url: data['url'],
             attributed_to_uri: (attributed_to.is_a? String and attributed_to \
                                 or attributed_to&.fetch 'id'),
-            created: data['created'], # FIXME: parse
+            created: data['published'], # FIXME: parse
+            modified: data['updated'],
             content: data['content'],
           )
 

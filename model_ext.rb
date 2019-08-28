@@ -9,31 +9,30 @@ require_relative 'model/collection'
 require_relative 'model/object'
 
 module Plugin::WebFinger
-  class Base
-    include Identity
-  end
+  Base.send :prepend, Identity
 
   class Activity
     def actor
-      @actor ||= (Base.find actor_uri or PW.fetch actor_uri)
+      @actor ||= (Actor.find actor_uri or PW.fetch actor_uri)
     end
 
     def object
-      @object ||= (Base.find object_uri or PW.fetch object_uri)
+      @object ||= (Object.find object_uri or PW.fetch object_uri)
+      # @object ||= (Object.find object_uri)
     end
   end
 
   class Actor
     def outbox
-      @outbox ||= (Base.find outbox_uri or PW.fetch outbox_uri)
+      @outbox ||= (Collection.find outbox_uri or PW.fetch outbox_uri)
     end
 
     def following
-      @following ||= (Base.find following_uri or PW.fetch following_uri)
+      @following ||= (Collection.find following_uri or PW.fetch following_uri)
     end
 
     def followers
-      @followers ||= (Base.find followers_uri or PW.fetch followers_uri)
+      @followers ||= (Collection.find followers_uri or PW.fetch followers_uri)
     end
   end
 
@@ -58,6 +57,8 @@ module Plugin::WebFinger
         if item.is_a? String
           uri = URI.parse item
           Base.find uri or PW.fetch uri
+          # Activity.find uri or Actor.find uri or Object.find uri or PW.fetch uri
+          # Base.find uri
         else
           ModelBuilder.new(item).build
         end
@@ -67,8 +68,9 @@ module Plugin::WebFinger
 
   class Object
     def attributed_to
-      uri = attributed_to_uri
-      @attributed_to ||= (Base.find uri or PW.fetch uri)
+      (uri = attributed_to_uri) or return nil
+      @attributed_to ||= (Actor.find uri or PW.fetch uri)
+      # @attributed_to ||= (Actor.find uri)
     end
   end
 end

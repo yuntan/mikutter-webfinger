@@ -9,6 +9,8 @@ module Plugin::WebFinger
   def fetch(uri)
     notice "fetch(#{uri})"
 
+    uri or return nil
+
     data =
       begin
         # Activity Streams 2.0 object

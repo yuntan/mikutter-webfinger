@@ -3,7 +3,7 @@
 module Plugin::WebFinger
   class Base < Diva::Model
     field.string :type, required: true
-    field.uri    :id, required: true
+    field.uri    :id,   required: true
     field.string :name, required: true
     field.uri    :url
 
@@ -12,18 +12,5 @@ module Plugin::WebFinger
     alias title name
     alias uri id
     alias perma_link url
-
-    # def initialize(*_)
-    #   super
-    #   Base.storage[uri] = self
-    # end
-
-    # def self.find(uri)
-    #   @@storage[uri]
-    # end
-    #
-    # def self.storage
-    #   @@storage ||= {}
-    # end
   end
 end

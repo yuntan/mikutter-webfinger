@@ -2,34 +2,34 @@
 
 module Plugin::WebFinger
   module Identity
-    module IdentityExtend
+    module ClassMethods
       def find(uri)
-        storage[uri]
+        obj = storage[uri]
+        obj.is_a? self or return nil
+        notice "using cached #{obj.class.name} for #{uri}"
+        obj
       end
 
-      # def register(obj)
-      #   storage[obj.uri] = obj
-      # end
-
-      def register
-        storage[uri] = self
+      def register(obj)
+        (obj.is_a? self) && obj&.uri or return
+        storage[obj.uri] = obj
       end
 
     private
 
       def storage
-        @storage ||= WeakStorage.new Diva::URI, Diva::Model, name: 'WebFinger Objects'
+        # @@storage ||= WeakStorage.new Diva::URI, Diva::Model, name: 'WebFinger Objects'
+        @@storage ||= {}
       end
     end
 
-    def self.included(klass)
-      klass.extend IdentityExtend
+    def self.prepended(klass)
+      klass.extend ClassMethods
     end
 
     def initialize(*args, &block)
       super
-      # self.class.register self
-      self.class.register
+      self.class.register self
     end
   end
 end
