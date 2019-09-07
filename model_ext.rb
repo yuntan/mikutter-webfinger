@@ -15,12 +15,11 @@ module Plugin::WebFinger
     include Identity
 
     def actor
-      @actor ||= (Actor.find actor_uri or PW.fetch actor_uri)
+      @actor ||= Actor.find_by_uri actor_uri
     end
 
     def object
-      @object ||= (Object.find object_uri or PW.fetch object_uri)
-      # @object ||= (Object.find object_uri)
+      @object ||= Object.find_by_uri object_uri
     end
   end
 
@@ -29,15 +28,15 @@ module Plugin::WebFinger
     include Identity
 
     def outbox
-      @outbox ||= (Collection.find outbox_uri or PW.fetch outbox_uri)
+      @outbox ||= Collection.find_by_uri outbox_uri
     end
 
     def following
-      @following ||= (Collection.find following_uri or PW.fetch following_uri)
+      @following ||= Collection.find_by_uri following_uri
     end
 
     def followers
-      @followers ||= (Collection.find followers_uri or PW.fetch followers_uri)
+      @followers ||= Collection.find_by_uri followers_uri
     end
   end
 
@@ -79,9 +78,7 @@ module Plugin::WebFinger
     include Identity
 
     def attributed_to
-      (uri = attributed_to_uri) or return nil
-      @attributed_to ||= (Actor.find uri or PW.fetch uri)
-      # @attributed_to ||= (Actor.find uri)
+      @attributed_to ||= Actor.find_by_uri attributed_to_uri
     end
   end
 end
