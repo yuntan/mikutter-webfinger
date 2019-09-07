@@ -31,10 +31,9 @@ Plugin.create :webfinger do
     [
       ['acct', actor.acct],
       [_('名前'), actor.name],
-      [_('別名'), actor.username],
-      # [_('投稿数'), actor.outbox.count],
-      # [_('フォロー'), actor.following.count],
-      # [_('フォロワー'), actor.followers.count],
+      [_('投稿数'), actor.outbox.count],
+      [_('フォロー'), actor.following.count],
+      [_('フォロワー'), actor.followers.count],
     ]
   end
 
