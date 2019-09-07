@@ -4,7 +4,13 @@ module Plugin::WebFinger
   module Identity
     module ClassMethods
       # override Diva::ModelExtend#find_by_uri
+      # returns Diva::Model | Deferrable
       def find_by_uri(uri)
+        find_by_uri! uri or PM.fetch uri # Deferreableを返す
+      end
+
+      # returns Diva::Model | nil
+      def find_by_uri!(uri)
         uri = (uri.is_a? Diva::URI and uri or Diva::URI.new uri)
         obj = storage[uri.hash]
         obj.is_a? self or return nil
