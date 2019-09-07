@@ -12,7 +12,7 @@ module_function
 
   def fetch(uri)
     Deferred.new do
-      uri or raise ArgumentError.new 'uri is nil'
+      uri or raise ArgumentError, 'uri is nil'
 
       notice "fetch uri: #{uri}"
 
@@ -21,9 +21,9 @@ module_function
           # Activity Streams 2.0 object
           # https://www.w3.org/TR/activitystreams-vocabulary/
           JSON.parse uri.read 'Accept' => 'application/activity+json'
-        rescue JSON::ParserError
-          error $!
-          raise $!
+        rescue JSON::ParserError => e
+          error e.full_message
+          raise e
         end
 
       ModelBuilder.new(data).build
@@ -35,7 +35,7 @@ module_function
       notice "uri_from_acct acct: #{acct}"
 
       (m = RE_ACCT.match acct) \
-        or raise ArgumentError.new "invalid acct: #{acct}"
+        or raise ArgumentError, "invalid acct: #{acct}"
       acct = "#{m[:name]}@#{m[:domain]}"
 
       # RFC6415 Web Host Metadata
