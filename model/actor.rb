@@ -16,10 +16,9 @@ module Plugin::WebFinger
     field.uri    :followers_uri
     field.uri    :liked_uri
 
-    handle RE_PROFILE_URI do |uri|
-      m = RE_PROFILE_URI.match uri.to_s
-      acct = "#{m[:name]}@#{m[:domain]}"
-      discover acct
+    # doブロックを渡すとfind_by_uriを上書きするので渡さない
+    # Modelの取得にfind_by_uriを使う
+    handle RE_PROFILE_URI
 
     def acct
       @acct ||= "#{username}@#{uri.host}"
