@@ -37,7 +37,7 @@ module Plugin::WebFinger
     end
 
     def to_s
-      "WebFinger #{type}(acct:#{acct})"
+      "WebFinger #{type} (acct:#{acct})"
     end
 
     # Actor implements ActivityPub Actor object

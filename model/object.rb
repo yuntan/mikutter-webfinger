@@ -22,7 +22,7 @@ module Plugin::WebFinger
     end
 
     def to_s
-      "WebFinger #{type}"
+      "WebFinger #{type} (#{id})"
     end
   end
 end
