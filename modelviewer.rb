@@ -18,7 +18,9 @@ Plugin.create :webfinger do
 
   deffragment PW::Actor, :summary, _('説明') do |actor|
     set_icon actor.icon
-    nativewidget(Gtk::Label.new(actor.summary).tap do |label|
+    nativewidget Gtk::VBox.new.closeup(Gtk::Label.new.tap do |label|
+      label.text = actor.summary
+      label.wrap = true
       label.selectable = true
     end)
   end
