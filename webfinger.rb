@@ -4,16 +4,20 @@ require_relative 'fetch'
 require_relative 'model/command'
 require_relative 'model_ext'
 
-PW = Plugin::WebFinger
+module Plugin::WebFinger
+  PW = Plugin::WebFinger
+end
 
 Plugin.create :webfinger do
+  PW = Plugin::WebFinger
+
   intent PW::Command, label: _('WebFingerで開く') do |token|
     actor = PW.discover token.model.query
     Plugin.call :open, actor
   end
 
   filter_quickstep_query do |query, yielder|
-    query =~ RE_ACCT and yielder << PW::Command.new(query: query)
+    query =~ PW::RE_ACCT and yielder << (PW::Command.new query: query)
     [query, yielder]
   end
 
