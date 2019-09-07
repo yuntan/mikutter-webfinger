@@ -8,7 +8,6 @@ module Plugin::WebFinger
 
     register :webfinger_actor, name: 'WebFinger Actor'
 
-    field.string :acct
     field.string :username
     field.string :summary
     field.uri    :icon_url
@@ -21,6 +20,9 @@ module Plugin::WebFinger
       m = RE_PROFILE_URI.match uri.to_s
       acct = "#{m[:name]}@#{m[:domain]}"
       discover acct
+
+    def acct
+      @acct ||= "#{username}@#{uri.host}"
     end
 
     # should be implemented for user model
