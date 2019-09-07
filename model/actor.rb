@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'base'
-
-RE_ACCT = /^@?(?<name>[a-z0-9\-_]+)@(?<domain>[a-z0-9\-]+(\.[a-z0-9\-]+)+)$/.freeze
-RE_PROFILE_URI = %r{^https://(?<domain>[a-z0-9\-]+(\.[a-z0-9\-]+)+)/@(?<name>[a-z0-9\-_]+)$}.freeze
-
 module Plugin::WebFinger
-  class Actor < Base
+  RE_PROFILE_URI = %r{^https://(?<domain>[a-z0-9\-]+(\.[a-z0-9\-]+)+)/@(?<name>[a-z0-9\-_]+)$}.freeze
+
+  class Actor < Diva::Model
     include Diva::Model::UserMixin
 
     register :webfinger_actor, name: 'WebFinger Actor'

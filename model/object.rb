@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'base'
-
 module Plugin::WebFinger
-  class Object < Base
+  class Object < Diva::Model
     include Diva::Model::MessageMixin
 
     register :webfinger_object, name: 'WebFinger Object', timeline: true
