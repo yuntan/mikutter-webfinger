@@ -1,9 +1,9 @@
 ---
 slug: :webfinger
 depends:
-  mikutter: 3.9.4
+  mikutter: '3.9'
   plugin: []
-version: '1.0'
+version: '0.1'
 author: '@yuntan_t@mstdn.maud.io'
-name: webfinger
-description: webfinger
+name: WebFinger
+description: WebFinger
