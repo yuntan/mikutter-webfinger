@@ -47,11 +47,23 @@ Plugin.create :webfinger do
 
   deffragment PW::Actor, :outbox, _('投稿') do |actor|
     set_icon Skin[:timeline]
-    tl = timeline nil
-    actor.outbox.fetch_page_next
-    actor.outbox.items.each do |activity|
-      activity.type =~ /^Create$/ or next
-      tl << activity.object
+    tl = timeline nil do
+      order { |object| object.modified.to_i }
+    end
+
+    Deferred.next do
+      +actor.outbox.fetch_page_next
+      actor.outbox.items.each do |activity|
+        activity.object or +(PW.fetch activity.object_uri)
+        obj = activity.object
+        obj.attributed_to or +(PW.fetch obj.attributed_to_uri)
+      end
+      tl << actor.outbox.items
+        .filter { |activity| activity.type == 'Create' }
+        .map(&:object)
+    end.trap do |err|
+      error err.full_message
+      warn err.backtrace.join("\n")
     end
   end
 end
