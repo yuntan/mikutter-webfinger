@@ -51,23 +51,28 @@ module Plugin::WebFinger
     end
 
     def fetch_page_next
-      notice "fetch_page_next: next: #{page_next_uri}"
+      Deferred.new do
+        notice "page_next_uri: #{page_next_uri}"
 
-      data = JSON.parse \
-        page_next_uri.read 'Accept' => 'application/activity+json'
-      # data['type'] == 'OrderedCollectionPage' or return nil
-
-      @page_next_uri = URI.parse data['next']
-      @items ||= []
-      @items += data['orderedItems'].map do |item|
-        item or next
-        if item.is_a? String
-          uri = URI.parse item
-          Base.find uri or PW.fetch uri
-          # Activity.find uri or Actor.find uri or Object.find uri or PW.fetch uri
-          # Base.find uri
-        else
-          ModelBuilder.new(item).build
+        data = JSON.parse \
+          page_next_uri.read 'Accept' => 'application/activity+json'
+        data['type'] == 'OrderedCollectionPage' \
+          or next Deferred.fail 'invalid type'
+        data
+      end.next do |data|
+        @page_next_uri = URI.parse data['next']
+        @items ||= []
+        @items += data['orderedItems'].map do |item|
+          item or next
+          if item.is_a? String
+            uri = URI.parse item
+            (Activity.find_by_uri uri) \
+              || (Actor.find_by_uri uri) \
+              || (Object.find_by_uri uri) \
+              || +(PW.fetch uri)
+          else
+            ModelBuilder.new(item).build
+          end
         end
       end
     end
