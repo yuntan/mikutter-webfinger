@@ -54,9 +54,9 @@ module Plugin::WebFinger
           opts.merge(
             name: data['name'],
             username: data['preferredUsername'],
-            summary: data['summary'], # FIXME: dehtmlize
+            summary: data['summary'] || '', # FIXME: dehtmlize
             url: data['url'],
-            icon_url: data['icon']['url'],
+            icon_url: (data['icon']&.fetch 'url'),
             outbox_uri: data['outbox'],
             following_uri: data['following'],
             followers_uri: data['followers'],
