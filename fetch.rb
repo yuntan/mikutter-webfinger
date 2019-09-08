@@ -41,7 +41,7 @@ module_function
       # RFC6415 Web Host Metadata
       uri = URI.parse "https://#{m[:domain]}/.well-known/host-meta"
       doc = REXML::Document.new uri.read 'Accept' => 'application/xrd+xml'
-      template = REXML::XPath.match(doc, '/XRD/Link[@rel="lrdd"]') \
+      template = REXML::XPath.match(doc, '/XRD/Link') \
         .first.attribute('template').to_s
 
       # RFC7033 WebFinger
