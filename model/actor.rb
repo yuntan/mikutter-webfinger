@@ -5,8 +5,9 @@ module Plugin::WebFinger
 
   class Actor < Diva::Model
     include Diva::Model::UserMixin
+    include Diva::Model::MessageMixin
 
-    register :webfinger_actor, name: 'WebFinger Actor'
+    register :webfinger_actor, name: 'WebFinger Actor', timeline: true
 
     field.string :username
     field.string :summary
@@ -33,6 +34,21 @@ module Plugin::WebFinger
       end.first
     end
 
+    # for message model
+    alias idname acct
+
+    # for message model
+    def user
+      self
+    end
+
+    # for message model
+    def created
+      @created ||= Time.now # dummy
+    end
+    alias modified created
+
+    # for message model
     def description
       summary # TODO: deHTMLnize
     end
