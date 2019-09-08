@@ -14,6 +14,8 @@ Plugin.create :webfinger do
         +(pw.fetch uri)
       end
       Plugin.call :open, actor
+    end.trap do |e|
+      error e.full_message
     end
   end
 end

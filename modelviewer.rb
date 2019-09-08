@@ -41,9 +41,8 @@ Plugin.create :webfinger do
       tl << actor.outbox.items
         .filter { |activity| activity.type == 'Create' }
         .map(&:object)
-    end.trap do |err|
-      error err.full_message
-      warn err.backtrace.join("\n")
+    end.trap do |e|
+      error e.full_message
     end
   end
 end
