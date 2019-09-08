@@ -15,6 +15,12 @@ QuickStepを開いて，検索したいアドレスを入力する．
 
 ![modelviewer](https://i.gyazo.com/7e62aa3f6bfe28a61d766385ca8d2ad9.png)
 
+## 動作を確認したActivityPub実装
+- mastodon
+- Pleroma
+- Misskey
+- writefreely
+
 ## TODO
 - HTMLの処理
 - タイムラインの抽出タブ対応
