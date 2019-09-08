@@ -65,7 +65,8 @@ module Plugin::WebFinger
         elsif klass == Collection
           opts.merge(
             count: data['totalItems'],
-            page_first_uri: data['first'],
+            page_first_uri: data['first']
+              .yield_self { |it| it.is_a? String and it or it['id'] },
           )
 
         elsif klass == Object
