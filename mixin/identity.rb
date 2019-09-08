@@ -33,7 +33,8 @@ module Plugin::WebFinger
 
       def storage
         @storage ||=
-          WeakStorage.new Integer, Diva::Model, name: 'WebFinger Objects'
+          # WeakStorage.new Integer, Diva::Model, name: 'WebFinger Objects'
+          TimeLimitedStorage.new Integer, Diva::Model
       end
     end
 
