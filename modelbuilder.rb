@@ -2,12 +2,12 @@
 
 require_relative 'model_ext'
 
-RE_TYPE_ACTIVITY = /^(Create|Announce)$/.freeze
-RE_TYPE_ACTOR = /^Person$/.freeze # TODO
-RE_TYPE_COLLECTION = /^(Ordered)?Collection$/.freeze
-RE_TYPE_OBJECT = /^(Note|Article)$/.freeze
-
 module Plugin::WebFinger
+  RE_TYPE_ACTIVITY = /^(Create|Announce)$/.freeze
+  RE_TYPE_ACTOR = /^(Person|Service)$/.freeze # TODO
+  RE_TYPE_COLLECTION = /^(Ordered)?Collection$/.freeze
+  RE_TYPE_OBJECT = /^(Note|Article)$/.freeze
+
   class ModelBuilder
     attr_reader :data
 
