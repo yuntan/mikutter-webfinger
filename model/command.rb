@@ -7,7 +7,7 @@ module Plugin::WebFinger
     field.string :query, required: true
 
     def title
-      format (Plugin[:webfinger]._ '%{query}をWebFingerで開く'), query: query
+      format (Plugin[:webfinger]._ '%{query}をWebFingerで検索'), query: query
     end
   end
 end
