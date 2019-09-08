@@ -6,7 +6,7 @@ module Plugin::WebFinger
       # override Diva::ModelExtend#find_by_uri
       # returns Diva::Model | Deferrable
       def find_by_uri(uri)
-        find_by_uri! uri or PM.fetch uri # Deferreableを返す
+        find_by_uri! uri or PW.fetch uri # Deferreableを返す
       end
 
       # returns Diva::Model | nil
