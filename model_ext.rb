@@ -60,9 +60,9 @@ module Plugin::WebFinger
           or next Deferred.fail 'invalid type'
         data
       end.next do |data|
-        @page_next_uri = URI.parse data['next']
-        @items ||= []
-        @items += data['orderedItems'].map do |item|
+        data or next
+
+        new_items = data['orderedItems'].map do |item|
           item or next
           if item.is_a? String
             uri = URI.parse item
@@ -74,6 +74,16 @@ module Plugin::WebFinger
             ModelBuilder.new(item).build
           end
         end
+
+        new_items.filter { |obj| obj.is_a? Activity }.each do |activity|
+          activity.object or +(PW.fetch activity.object_uri)
+          obj = activity.object
+          obj.attributed_to or +(PW.fetch obj.attributed_to_uri)
+        end
+
+        @page_next_uri = URI.parse data['next']
+        @items ||= []
+        @items += new_items
       end
     end
   end

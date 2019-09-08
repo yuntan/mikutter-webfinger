@@ -27,20 +27,19 @@ Plugin.create :webfinger do
 
   deffragment pw::Actor, :outbox, _('投稿') do |actor|
     set_icon Skin[:timeline]
-    tl = timeline nil do
-      order { |object| object.modified.to_i }
-    end
 
+    outbox = actor.outbox
     Deferred.next do
-      +actor.outbox.fetch_page_next
-      actor.outbox.items.each do |activity|
-        activity.object or +(pw.fetch activity.object_uri)
-        obj = activity.object
-        obj.attributed_to or +(pw.fetch obj.attributed_to_uri)
+      +outbox.fetch_page_next
+
+      unless outbox.items
+        nativewidget Gtk::Label.new Plugin[:webfinger]._ '取得出来ません'
+        next
       end
-      tl << actor.outbox.items
-        .filter { |activity| activity.type == 'Create' }
-        .map(&:object)
+
+      (timeline nil do
+        order { |object| object.modified.to_i }
+      end) << outbox.items.map(&:object)
     end.trap do |e|
       error e.full_message
     end
