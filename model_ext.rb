@@ -54,8 +54,14 @@ module Plugin::WebFinger
       Deferred.new do
         notice "page_next_uri: #{page_next_uri}"
 
-        data = JSON.parse \
-          page_next_uri.read 'Accept' => 'application/activity+json'
+        data = begin
+                 JSON.parse \
+                   page_next_uri.read 'Accept' => 'application/activity+json'
+               rescue JSON::ParserError, OpenURI::HTTPError => e
+                 error e.full_message
+                 self.page_first_uri = @page_next_uri = nil
+                 next
+               end
         data['type'] == 'OrderedCollectionPage' \
           or next Deferred.fail 'invalid type'
         data
