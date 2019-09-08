@@ -3,7 +3,7 @@ slug: :webfinger
 depends:
   mikutter: '3.9'
   plugin: []
-version: '0.1'
+version: '0.2'
 author: '@yuntan_t@mstdn.maud.io'
 name: WebFinger
 description: WebFinger
